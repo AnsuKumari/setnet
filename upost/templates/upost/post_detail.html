@@ -1,0 +1,49 @@
+{% extends 'upost/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default text-left">
+            <div class="panel-body">
+                <div class="post">
+                    <div class="date">
+                        {{ post.created }}
+                    </div>
+                
+                    {% if user == post.user %}
+                         <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                         <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                    {% endif %}
+                    <h1>{{ post.user }}</h1>
+                    <p>{{ post.text|linebreaksbr }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <a class="btn btn-default" href="{% url 'comment_add' pk=post.pk %}">Add comment</a> <hr>
+    {% for comment in post.comments.all %}
+        {% if user.is_authenticated %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="well">
+                        <div class="comment">
+                            <div class="date">
+                                {{ comment.created }}
+                                {% if user == comment.user or user == post.user %}
+                                    <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                                {% endif %}
+                            </div>
+                            <strong>{{ comment.user }}</strong>
+                            <p>{{ comment.text|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>No comments here yet :(</p>
+    {% endfor %}
+
+{% endblock %}
