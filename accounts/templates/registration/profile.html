@@ -1,0 +1,23 @@
+{% extends 'upost/base.html' %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-sm-12">
+	        <div class="panel panel-default text-left">
+	            <div class="panel-body">
+	                <div class="post">
+	                    <div class="date">
+	                        {{ profile_user.cp }}
+	                        {{ profile_user.dp }}
+	                    </div>
+                        {% if user == profile_user %}
+                             <a class="btn btn-default" href="{% url 'edit_profile' pk=profile_user.profile.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                        {% endif %}
+	                    <h1>{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
+	                    <p>{{ profile_user.bio|linebreaksbr }}</p>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+{% endblock %}

@@ -9,8 +9,8 @@
                     <div class="date">
                         {{ post.created }}
                     </div>
-                    <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.user }}</a></h1>
-                    <p>{{ post.text|linebreaksbr }}</p>
+                    <h1><a href="{% url 'profile' pk=post.user.pk %}">{{ post.user.first_name }}</a></h1>
+                    <p><a href="{% url 'post_detail' pk=post.pk %}">{{ post.text|linebreaksbr }}</a></p>
                     <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
                 </div>
             </div>
