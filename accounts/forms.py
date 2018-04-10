@@ -13,4 +13,4 @@ class EditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('cp', 'dp', 'bio', 'birth_date',) 
+        fields = ('dp', 'cp', 'bio',) 

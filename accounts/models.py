@@ -5,10 +5,9 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True)
-    cp = models.CharField(max_length=30, blank=True)
-    dp = models.CharField(max_length=30, blank=True)
-    location = models.CharField(max_length=30, blank=True)
+    bio = models.CharField(max_length=500, blank=True)
+    dp = models.ImageField(upload_to = lambda instance, filename: '/'.join(['images', 'dp', str(instance.pk)]))
+    cp = models.ImageField(upload_to = lambda instance, filename: '/'.join(['images', 'cp', str(instance.pk)]))
     birth_date = models.DateField(null=True, blank=True)
 
 @receiver(post_save, sender=User)

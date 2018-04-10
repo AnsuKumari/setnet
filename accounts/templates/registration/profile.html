@@ -4,20 +4,38 @@
 	<div class="row">
 	    <div class="col-sm-12">
 	        <div class="panel panel-default text-left">
-	            <div class="panel-body">
-	                <div class="post">
-	                    <div class="date">
-	                        {{ profile_user.cp }}
-	                        {{ profile_user.dp }}
-	                    </div>
-                        {% if user == profile_user %}
-                             <a class="btn btn-default" href="{% url 'edit_profile' pk=profile_user.profile.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-                        {% endif %}
+	            <div class="panel-body"  style="background-image: url(../../media/{{profile_user.profile.cp}}); ">
+                    <div class="col-sm-4">
+	                    <img style="width: 176px; height: 176px;" src="../../media/{{profile_user.profile.dp}}" alt="img">
+	                </div>
+	                <div class="col-sm-8">
+	                    {% if user == profile_user %}
+	                        <a class="btn btn-default" href="{% url 'edit_profile' pk=profile_user.profile.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+	                    {% endif %}
 	                    <h1>{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
-	                    <p>{{ profile_user.bio|linebreaksbr }}</p>
+	                    <p>@{{ profile_user.username }}</p>
+	                    <p>{{ profile_user.profile.bio|linebreaksbr }}</p>
+	                    <p>{{ profile_user.email }}</p>
 	                </div>
 	            </div>
 	        </div>
 	    </div>
 	</div>
+
+	{% for post in posts %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="well">
+                <div class="post">
+                    <div class="date">
+                        {{ post.created }}
+                    </div>
+                    <h1><a href="{% url 'profile' pk=post.user.pk %}">{{ post.user.first_name }}</a></h1>
+                    <p><a href="{% url 'post_detail' pk=post.pk %}">{{ post.text|linebreaksbr }}</a></p>
+                    <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}
