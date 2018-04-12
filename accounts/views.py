@@ -20,13 +20,15 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 def profile(request, pk=None):
-	# 	user = Profile.objects.filter(user=request.user.id)[0]
-	if pk:
-		user = get_object_or_404(User, pk=pk)
-	else:
-		user = request.user
-	posts = Post.objects.filter(user=user)
-	return render(request, 'registration/profile.html', {'profile_user': user, 'posts':posts})
+    # 	user = Profile.objects.filter(user=request.user.id)[0]
+    if pk:
+    	user = get_object_or_404(User, pk=pk)
+    else:
+    	user = request.user
+    posts = Post.objects.filter(user=user)
+    dp_url = user.profile.dp if user.profile.dp else 'images/dp/user-default-sm.png'
+    cp_url = user.profile.cp if user.profile.cp else 'images/cp/cover-default.jpg'
+    return render(request, 'registration/profile.html', {'profile_user': user, 'posts':posts, 'dp_url':dp_url, 'cp_url':cp_url})
 
 def edit_profile(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
