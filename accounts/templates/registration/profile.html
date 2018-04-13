@@ -1,7 +1,60 @@
 {% extends 'upost/base.html' %}
 
 {% block content %}
-	<div class="row">
+<div class="wrapper">
+	<div class="header header-filter" style="background-image: url('/media/{{cp_url}}'); margin-top: -30px;"></div>
+		<div class="col-md-8 col-md-offset-2">
+			<div class="main main-raised">
+				<div class="container">
+					<div class="profile-content">
+	                    <div class="profile">
+	                        <div class="avatar">
+	                            <img src="/media/{{dp_url}}" alt="Circle Image" class="img-circle img-responsive img-raised">
+	                        </div>
+	                        <div class="name">
+	                            <h3 class="title">{{ profile_user.first_name }} {{ profile_user.last_name }}
+					                {% if user == profile_user %}
+				                        <a href="{% url 'edit_profile' pk=profile_user.profile.pk %}"><i class="material-icons">edit</i></a>
+				                    {% endif %}
+	                            </h3>
+								<h4><i class="fa fa-user"></i> @{{ profile_user.username }}</h4>
+								<h4><i class="fa fa-envelope"></i> {{ profile_user.email }}</h4>
+								<div class="description text-center">
+			                        <p>{{ profile_user.profile.bio|linebreaksbr }}</p>
+				                </div>
+	                        </div>
+	                    </div>
+		            </div>
+		        </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="col-md-8 col-md-offset-2">
+        {% for post in posts %}
+
+            <div class="main main-raised" style="margin-top: 30px; padding: 10px;">
+                <div class="content">
+                        <div class=" col-md-6">
+                            <h4> <a href="{% url 'profile' pk=post.user.pk %}">{{ post.user.first_name }}</a></h4>
+                        </div>
+                        <div class="col-md-offset-7 ">
+                            <h4 class="text-muted"><i class="fa fa-calendar-o"></i> {{ post.created }}</h4>
+                        </div>
+                        <hr>
+                        <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.text|linebreaksbr }}</a></h1>
+                        <hr>
+                        <h2><i class="material-icons">chat</i> {{ post.comments.count }}</h2>
+                </div>
+            </div>
+
+        {% endfor %}
+        <div style="height: 30px;"></div>
+	</div>
+</div>
+
+
+
+	<!-- <div class="row">
 	    <div class="col-sm-12">
 	        <div class="panel panel-default text-left">
 	            <div class="panel-body"  style="background-image: url(/media/{{cp_url}}); ">
@@ -36,6 +89,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    {% endfor %}
+    </div> 
+    {% endfor %} -->
 {% endblock %}

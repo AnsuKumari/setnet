@@ -1,20 +1,101 @@
 {% extends 'upost/base.html' %}
 
 {% block content %}
-    {% for post in posts %}
+<div class="container">
     <div class="row">
-        <div class="col-sm-12">
-            <div class="well">
-                <div class="post">
-                    <div class="date">
-                        {{ post.created }}
+        <div class="col-md-offset-2 col-md-8">
+            {% for post in posts %}
+
+                <div class="card card-nav-tabs">
+                    <div class="content">
+                            <div class="col-md-2 col-sm-2">
+                                <img src="static/img/user-default.png" style=" max-height: 90px;" alt="Circle Image" class="img-circle img-responsive">
+                            </div>
+                            <div class="col-md-3">
+                                <h3><a href="{% url 'profile' pk=post.user.pk %}">{{ post.user.first_name }}</a></h3>
+                            </div>
+                            <div class="col-md-offset-7 ">
+                                <h4 class="text-muted"><i class="fa fa-calendar-o"></i> {{ post.created }}</h4>
+                            </div>
+                            <hr>
+                            <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.text|linebreaksbr }}</a></h1>
+                            <hr>
+                            <h2><i class="material-icons">chat</i> {{ post.comments.count }}</h2>
                     </div>
-                    <h1><a href="{% url 'profile' pk=post.user.pk %}">{{ post.user.first_name }}</a></h1>
-                    <p><a href="{% url 'post_detail' pk=post.pk %}">{{ post.text|linebreaksbr }}</a></p>
-                    <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
                 </div>
-            </div>
-        </div>
+
+            {% endfor %}
+            <div style="height: 30px;"></div>
+         </div>
     </div>
-    {% endfor %}
+</div>
 {% endblock %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            {% for post in posts %}
+
+                <div class="card card-nav-tabs">
+                    <div class="content">
+                            <div class="col-md-2">
+                                <img src="static/img/user-default.png" alt="Circle Image" class="img-circle img-responsive">
+                            </div>
+                            <div class=" col-md-6">
+                                <a href="{% url 'profile' pk=post.user.pk %}">{{ post.user.first_name }}</a>
+                            </div>
+                            <div class="col-md-offset-7 ">
+                                <p class="text-muted">{{ post.created }}</p>
+                            </div>
+                            <hr>
+                            <h1  data-toggle="modal" data-target="#myModal"><!-- <a href="{% url 'post_detail' pk=post.pk %}"> -->{{ post.text|linebreaksbr }}</h1>
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">{{ post.user.first_name }} {{ post.user.last_name }}</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    {{ post.text|linebreaksbr }}
+                                    <hr>
+                                    <a class="btn btn-default" href="{% url 'comment_add' pk=post.pk %}">Add comment</a>
+                                    {% for comment in post.comments.all %}
+                                        {% if user.is_authenticated %}
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="well">
+                                                        <div class="comment">
+                                                            <div class="date">
+                                                                {{ comment.created }}
+                                                                {% if user == comment.user or user == post.user %}
+                                                                    <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                                                                {% endif %}
+                                                            </div>
+                                                            <strong>{{ comment.user.first_name }}</strong>
+                                                            <p>{{ comment.text|linebreaks }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% empty %}
+                                        <p>No comments here yet :(</p>
+                                    {% endfor %}
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <hr>
+                            <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+                    </div>
+                </div>
+
+            {% endfor %}
+            <div style="height: 30px;"></div>
+         </div>
+    </div>
+</div>
